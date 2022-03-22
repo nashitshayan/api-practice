@@ -7,19 +7,35 @@
 		<title>Working with APIs</title>
 	</head>
 	<body>
+		<label for="search">
+			<input type="text" id="searchBar" placeholder="search a gif" />
+		</label>
+		<button id="load-img">New Image</button>
 		<img src="#" alt="" />
 
 		<script>
 			const img = document.querySelector('img');
-			fetch(
-				'https://api.giphy.com/v1/gifs/translate?api_key=iV44bOMptyn9ocVVs9Yv5rJ157DQjke9&s=cats',
-				{ mode: 'cors' },
-			)
-				.then((response) => response.json())
-				.then((json) => {
-					img.src = json.data.images.original.url;
-					console.log(img);
-				});
+			const btn = document.getElementById('load-img');
+			const searchBar = document.getElementById('searchBar');
+
+			const constructURL = (input) => {
+				return `https://api.giphy.com/v1/gifs/translate?api_key=iV44bOMptyn9ocVVs9Yv5rJ157DQjke9&s=${input}`;
+			};
+			const handleSeach = () => {
+				let userInput = searchBar.value;
+
+				let url = constructURL(userInput);
+				fetchNewGIF(url);
+			};
+
+			btn.addEventListener('click', handleSeach);
+
+			function fetchNewGIF(url) {
+				fetch(url, { mode: 'cors' })
+					.then((response) => response.json())
+					.then((json) => (img.src = json.data.images.original.url))
+					.catch((error) => (img.alt = 'Couldnt load image'));
+			}
 		</script>
 	</body>
 </html>
