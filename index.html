@@ -21,20 +21,21 @@
 			const constructURL = (input) => {
 				return `https://api.giphy.com/v1/gifs/translate?api_key=iV44bOMptyn9ocVVs9Yv5rJ157DQjke9&s=${input}`;
 			};
-			const handleSeach = () => {
+			const handleSearch = () => {
 				let userInput = searchBar.value;
 
 				let url = constructURL(userInput);
 				fetchNewGIF(url);
 			};
 
-			btn.addEventListener('click', handleSeach);
+			btn.addEventListener('click', handleSearch);
 
-			function fetchNewGIF(url) {
-				fetch(url, { mode: 'cors' })
-					.then((response) => response.json())
-					.then((json) => (img.src = json.data.images.original.url))
-					.catch((error) => (img.alt = 'Couldnt load image'));
+			async function fetchNewGIF(url) {
+				const response = await fetch(url, { mode: 'cors' });
+				const catData = await response.json();
+
+				img.src = catData.data.images.original.url;
+				//.catch((error) => (img.alt = 'Couldnt load image'));
 			}
 		</script>
 	</body>
